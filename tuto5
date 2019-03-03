@@ -69,6 +69,10 @@ function get_tokens_by_standard
 ##        }"
 ##
 ##	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze -d "${post}"
+
+	echo "## Standard Analyzer Tokens"
+	echo "## text : Winter is Coming!!!"
+
 	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze?pretty -d '
 	{
 		"analyzer": "standard",
@@ -84,6 +88,9 @@ function get_tokens_by_nori
     if [ $? -ne 0 ]; then
 	echo "Your ES Process is not working yet"
     else
+	echo "## Nori Analyzer Tokens"
+	echo "## text : 21세기 세종계획"
+
 	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/noritest1/_analyze?pretty -d '
 	{
 		"analyzer": "my_analyzer",
@@ -100,6 +107,9 @@ function indexing_by_nori
     if [ $? -ne 0 ]; then
 	echo "Your ES Process is not working yet"
     else
+	echo "## Nori Analyzer Indexing"
+	echo "## norimsg : 21세기 세종계획"
+
 	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/noritest1/_doc -d '
 	{
             "norimsg": "21세기 세종계획"
@@ -114,6 +124,9 @@ function searching_by_nori
     if [ $? -ne 0 ]; then
 	echo "Your ES Process is not working yet"
     else
+	echo "## Nori Analyzer Searching"
+	echo "## norimsg : 세종"
+
 	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/noritest1/_search?pretty -d '
 	{
             "query": {

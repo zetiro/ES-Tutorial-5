@@ -94,12 +94,96 @@ curl -s -H 'Content-Type: application/json' -XPUT http://localhost:9200/noritest
 
 ```bash
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 4
+## Text : Winter is Coming!!!
+{
+  "tokens" : [
+    {
+      "token" : "winter",
+      "start_offset" : 0,
+      "end_offset" : 6,
+      "type" : "<ALPHANUM>",
+      "position" : 0
+    },
+    {
+      "token" : "is",
+      "start_offset" : 7,
+      "end_offset" : 9,
+      "type" : "<ALPHANUM>",
+      "position" : 1
+    },
+    {
+      "token" : "coming",
+      "start_offset" : 10,
+      "end_offset" : 16,
+      "type" : "<ALPHANUM>",
+      "position" : 2
+    }
+  ]
+}
 
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 5
+{
+  "tokens" : [
+    {
+      "token" : "21",
+      "start_offset" : 0,
+      "end_offset" : 2,
+      "type" : "word",
+      "position" : 0
+    },
+    {
+      "token" : "세기",
+      "start_offset" : 2,
+      "end_offset" : 4,
+      "type" : "word",
+      "position" : 1
+    },
+    {
+      "token" : "세종",
+      "start_offset" : 5,
+      "end_offset" : 7,
+      "type" : "word",
+      "position" : 2
+    },
+    {
+      "token" : "계획",
+      "start_offset" : 7,
+      "end_offset" : 9,
+      "type" : "word",
+      "position" : 3
+    }
+  ]
+}
 
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 6
+{"_index":"noritest1","_type":"_doc","_id":"sj1bRGkB78Gpz5ewS637","_version":1,"result":"created","_shards":{"total":2,"successful":2,"failed":0},"_seq_no":0,"_primary_term":1}
 
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 7
+{
+  "took" : 17,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 1,
+    "max_score" : 0.2876821,
+    "hits" : [
+      {
+        "_index" : "noritest1",
+        "_type" : "_doc",
+        "_id" : "sj1bRGkB78Gpz5ewS637",
+        "_score" : 0.2876821,
+        "_source" : {
+          "norimsg" : "21세기 세종계획"
+        }
+      }
+    ]
+  }
+}
 
 ```
 
