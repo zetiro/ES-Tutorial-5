@@ -3,7 +3,7 @@
 # ES Nori Plugin Install
 function install_nori
 {
-    /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-nori
+    sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-nori
 
 }
 

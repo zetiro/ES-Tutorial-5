@@ -1,4 +1,4 @@
-# ES-Tutorial-4-2
+# ES-Tutorial-5
 
 ElasticSearch 5 번째 튜토리얼을 기술합니다.
 
@@ -50,7 +50,7 @@ Product Version. 6.6.0(2019/02/07 기준 Latest Ver.)
 
 ```
 
-4) Nori 플러그인 설치 사항을 반영하기 위해 롤링리스타트로 전체 노드 재시작 진행
+4) Nori Analyzer 를 쓰기 위한 테스트 인덱스 생성
 
 ```bash
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 3
