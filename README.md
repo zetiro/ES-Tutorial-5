@@ -93,8 +93,9 @@ curl -s -H 'Content-Type: application/json' -XPUT http://localhost:9200/noritest
 ## Smoke Test
 
 ```bash
-[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 4
-## Text : Winter is Coming!!!
+[ec2-user@ip-172-31-4-45 ES-Tutorial-5]$ ./tuto5 4
+## Standard Analyzer Tokens
+## text : Winter is Coming!!!
 {
   "tokens" : [
     {
@@ -122,6 +123,8 @@ curl -s -H 'Content-Type: application/json' -XPUT http://localhost:9200/noritest
 }
 
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 5
+## Nori Analyzer Tokens
+## text : 21세기 세종계획
 {
   "tokens" : [
     {
@@ -156,11 +159,15 @@ curl -s -H 'Content-Type: application/json' -XPUT http://localhost:9200/noritest
 }
 
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 6
-{"_index":"noritest1","_type":"_doc","_id":"sj1bRGkB78Gpz5ewS637","_version":1,"result":"created","_shards":{"total":2,"successful":2,"failed":0},"_seq_no":0,"_primary_term":1}
+## Nori Analyzer Indexing
+## norimsg : 21세기 세종계획
+{"_index":"noritest1","_type":"_doc","_id":"sz1iRGkB78Gpz5ewOq03","_version":1,"result":"created","_shards":{"total":2,"successful":2,"failed":0},"_seq_no":1,"_primary_term":1}[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$
 
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 7
+## Nori Analyzer Searching
+## norimsg : 세종
 {
-  "took" : 17,
+  "took" : 28,
   "timed_out" : false,
   "_shards" : {
     "total" : 5,
@@ -169,13 +176,13 @@ curl -s -H 'Content-Type: application/json' -XPUT http://localhost:9200/noritest
     "failed" : 0
   },
   "hits" : {
-    "total" : 1,
+    "total" : 2,
     "max_score" : 0.2876821,
     "hits" : [
       {
         "_index" : "noritest1",
         "_type" : "_doc",
-        "_id" : "sj1bRGkB78Gpz5ewS637",
+        "_id" : "sz1iRGkB78Gpz5ewOq03",
         "_score" : 0.2876821,
         "_source" : {
           "norimsg" : "21세기 세종계획"
