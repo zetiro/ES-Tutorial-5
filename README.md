@@ -1,6 +1,6 @@
-# ES-Tutorial-5
+# ES-Tutorial-4-2
 
-ElasticSearch 다섯 번째 튜토리얼을 기술합니다.
+ElasticSearch 5 번째 튜토리얼을 기술합니다.
 
 본 스크립트는 외부 공인망을 기준으로 작성되었습니다.
 
@@ -13,110 +13,95 @@ Product Version. 6.6.0(2019/02/07 기준 Latest Ver.)
 
 최신 버전은 [Elasticsearch 공식 홈페이지](https://www.elastic.co/downloads) 에서 다운로드 가능합니다.
 
-## ElasticSearch Product 설치
+## Nori Plugin 다뤄보기
 
-이 튜토리얼에서는 rpm 파일을 이용하여 실습합니다.
+이 튜토리얼에서는 rpm 로 설치된 ES 기준으로 실습합니다.
 
 ```bash
 [ec2-user@ip-xxx-xxx-xxx-xxx ~]$ sudo yum -y install git
 
-[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ git clone https://github.com/benjamin-btn/ES-Tutorial-4-1.git
+[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ git clone https://github.com/benjamin-btn/ES-Tutorial-5.git
 
-[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ cd ES-Tutorial-4-1
+[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ cd ES-Tutorial-5
 
-[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-4-1]$ ./tuto4-1
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5
 ##################### Menu ##############
- $ ./tuto4-1 [Command]
+ $ ./tuto5 [Command]
 #####################%%%%%%##############
-         1 : install java & elasticsearch packages
-         2 : configure elasticsearch.yml & jvm.options
-         3 : start elasticsearch process
+         1 : install nori plugin
+         2 : restart es process
+         3 : make a nori mappings
+         4 : standard analyzer tokens
+         5 : nori analyzer tokens
+         6 : nori analyzer indexing
+         7 : nori analyzer searching
 #########################################
-
-
-[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-4-1]$ ./tuto4-1 1
 
 ```
 
-## ELK Tutorial 4-1 - Elasticsearch Data Node 추가
-
-### Elasticsearch
-* /etc/elasticsearch/elasticsearch.yml
-  1) cluster.name, node.name, http.cors.enabled, http.cors.allow-origin 기존장비와 동일 설정
-  2) network.host 를 network.bind_host 와 network.publish_host 기존장비와 동일 설정
-  3) http.port, transport.tcp.port 기존장비와 동일 설정
-  4) **node.master: false, node.data:true 로 role 추가 설정**
-  5) discovery.zen.minimum_master_nodes 기존장비와 동일 설정
-  6) **discovery.zen.ping.unicast.hosts 는 직접 수정 필요, 기존에 설정한 마스터 노드 3대만 설정(데이터노드 아이피 설정 금지)**
-  7) **클러스터에 데이터노드 3대가 정상적으로 추가되면 기존 마스터와 데이터노드 롤을 전부 갖고 있는 노드에 node.master: true, node.data:false 로 설정하여 한대씩 프로세스 재시작**
-    - **./tuto4-1 2 실행 후 discovery.zen.ping.unicast.hosts 에 기존 장비와 추가했던 노드 3대의 ip:9300 설정 필요**
-
-
-* /etc/elasticsearch/jvm.options
-  - Xms1g, Xmx1g 를 물리 메모리의 절반으로 수정
+1) /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-nori 로 Nori 설치
+2) Nori 플러그인 설치 사항을 반영하기 위해 롤링리스타트로 전체 노드 재시작 진행
+3) 재시작과 동시에 Nori 의 사전파일 userdict_ko.txt 를 /etc/elasticsearch 밑에 생성
 
 ```bash
-[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ sudo vi /etc/elasticsearch/elasticsearch.yml
-### For ClusterName & Node Name
-cluster.name: mytuto-es
-node.name: ip-172-31-13-110
-### For Response by External Request
-network.bind_host: 0.0.0.0
-network.publish_host: {IP}
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 1
 
-### For Head
-http.cors.enabled: true
-http.cors.allow-origin: "*"
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 2
 
-### ES Node Role Settings
-node.master: false
-node.data: true
+```
 
-### ES Port Settings
-http.port: 9200
-transport.tcp.port: 9300
+4) Nori 플러그인 설치 사항을 반영하기 위해 롤링리스타트로 전체 노드 재시작 진행
 
-### Discovery Settings
-discovery.zen.ping.unicast.hosts: [  "{IP1}:9300",  "{IP2}:9300",  "{IP3}:9300",  ]
-discovery.zen.minimum_master_nodes: 2
+```bash
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 3
 
-[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ sudo vi /etc/elasticsearch/jvm.options
+curl -s -H 'Content-Type: application/json' -XPUT http://localhost:9200/noritest1 -d '
+{
+  "settings": {
+    "index": {
+      "analysis": {
+        "tokenizer": {
+          "nori_user_dict": {
+            "type": "nori_tokenizer",
+            "decompound_mode": "mixed",
+            "user_dictionary": "userdict_ko.txt"
+          }
+        },
+        "analyzer": {
+          "my_analyzer": {
+            "type": "custom",
+            "tokenizer": "nori_user_dict"
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "norimsg": {
+          "type": "text",
+          "analyzer": "my_analyzer"
+        }
+      }
+    }
+  }
+}'
 
-- -Xms1g
-+ -Xms4g
-- -Xmx1g
-+ -Xmx4g
 ```
 
 ## Smoke Test
 
-### Elasticsearch
-
 ```bash
-[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ curl localhost:9200
-{
-  "name" : "ip-172-31-13-110",
-  "cluster_name" : "mytuto-es",
-  "cluster_uuid" : "fzHl1JNvRd-3KHlleS1WIw",
-  "version" : {
-    "number" : "6.6.0",
-    "build_flavor" : "default",
-    "build_type" : "rpm",
-    "build_hash" : "a9861f4",
-    "build_date" : "2019-01-24T11:27:09.439740Z",
-    "build_snapshot" : false,
-    "lucene_version" : "7.6.0",
-    "minimum_wire_compatibility_version" : "5.6.0",
-    "minimum_index_compatibility_version" : "5.0.0"
-  },
-  "tagline" : "You Know, for Search"
-}
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 4
+
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 5
+
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 6
+
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-5]$ ./tuto5 7
 
 ```
-
-* Web Browser 에 [http://ec2-3-0-99-205.ap-southeast-1.compute.amazonaws.com:9100/index.html?base_uri=http://{FQDN}:9200](http://ec2-3-0-99-205.ap-southeast-1.compute.amazonaws.com:9100/index.html?base_uri=http://{FQDN}:9200) 실행
-
-![Optional Text](image/es-head.png)
 
 ## Trouble Shooting
 
@@ -128,5 +113,6 @@ path.logs: /var/log/elasticsearch 로 설정되어 cluster.name 이 적용된 �
 위의 경우에는 /var/log/elasticsearch/mytuto-es.log 에서 확인할 수 있습니다.
 
 ```bash
-[ec2-user@ip-xxx-xxx-xxx-xxx ~]$ sudo vi /var/log/elasticsearch/mytuto-es.log
+[ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-4-2]$ sudo vi /var/log/elasticsearch/mytuto-es.log
 ```
+
