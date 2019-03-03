@@ -207,3 +207,4 @@ path.logs: /var/log/elasticsearch 로 설정되어 cluster.name 이 적용된 �
 [ec2-user@ip-xxx-xxx-xxx-xxx ES-Tutorial-4-2]$ sudo vi /var/log/elasticsearch/mytuto-es.log
 ```
 
+![Optional Text](image/noridict.jpg)
