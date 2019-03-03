@@ -102,7 +102,7 @@ function indexing_by_nori
     else
 	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/noritest1/_doc -d '
 	{
-            "mytest": "21세기 세종계획"
+            "norimsg": "21세기 세종계획"
         }'
     fi
 }
@@ -118,7 +118,7 @@ function searching_by_nori
 	{
             "query": {
 	        "match": {
-		    "mytest": "세종"
+		    "norimsg": "세종"
 	        }
 	    }
         }'
