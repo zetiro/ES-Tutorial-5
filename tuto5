@@ -84,7 +84,7 @@ function get_tokens_by_nori
     if [ $? -ne 0 ]; then
 	echo "Your ES Process is not working yet"
     else
-	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze?pretty -d '
+	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/noritest1/_analyze?pretty -d '
 	{
 		"analyzer": "my_analyzer",
 		"text": "21세기 세종계획"
