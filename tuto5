@@ -69,7 +69,7 @@ function get_tokens_by_standard
 ##        }"
 ##
 ##	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze -d "${post}"
-	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze -d '
+	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze?pretty -d '
 	{
 		"analyzer": "standard",
 		"text": "Winter is coming!!!"
@@ -84,7 +84,7 @@ function get_tokens_by_nori
     if [ $? -ne 0 ]; then
 	echo "Your ES Process is not working yet"
     else
-	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze -d '
+	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/_analyze?pretty -d '
 	{
 		"analyzer": "my_analyzer",
 		"text": "21세기 세종계획"
@@ -114,7 +114,7 @@ function searching_by_nori
     if [ $? -ne 0 ]; then
 	echo "Your ES Process is not working yet"
     else
-	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/noritest1/_search -d '
+	curl -s -H 'Content-Type: application/json' -XPOST http://localhost:9200/noritest1/_search?pretty -d '
 	{
             "query": {
 	        "match": {
