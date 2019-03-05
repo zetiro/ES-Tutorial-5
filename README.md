@@ -1,6 +1,6 @@
 # ES-Tutorial-5
 
-ElasticSearch 5 번째 튜토리얼을 기술합니다.
+ElasticSearch 다섯 번째 튜토리얼을 기술합니다.
 
 본 스크립트는 외부 공인망을 기준으로 작성되었습니다.
 
