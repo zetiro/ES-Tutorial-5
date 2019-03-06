@@ -17,6 +17,8 @@ Product Version. 6.6.0(2019/02/07 기준 Latest Ver.)
 
 이 튜토리얼에서는 rpm 로 설치된 ES 기준으로 실습합니다.
 
+[Nori Analyzer 공식 레퍼런스 페이지](https://www.elastic.co/guide/en/elasticsearch/plugins/current/analysis-nori.html) 를 참고해주세요.
+
 ```bash
 [ec2-user@ip-xxx-xxx-xxx-xxx ~]$ sudo yum -y install git
 
